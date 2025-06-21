@@ -79,8 +79,6 @@ Todos los datos se cargan en tablas de staging en PostgreSQL.
      - Contraseña: etl_password
      - Base de datos: etl_repository
 
-   **Nota:** No uses "db" como servidor, usa el nombre del servicio definido en `docker-compose.yml`.
-
 5. Cuando termines, apaga los servicios:
 
    ```sh
