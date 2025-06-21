@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Servicio MySQL para la fuente de datos
+  mysql-source:
+    image: mysql:8.0
+    container_name: etl-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ecommerce_db
+      MYSQL_USER: etl_user
+      MYSQL_PASSWORD: etl_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # Servicio PostgreSQL para el destino ETL
+  postgres-destination:
+    image: postgres:13
+    container_name: etl-postgres
+    environment:
+      POSTGRES_DB: etl_repository
+      POSTGRES_USER: etl_user
+      POSTGRES_PASSWORD: etl_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U etl_user -d etl_repository"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    
+  # Servicio Adminer para gestionar las bases de datos
+  adminer:
+    image: adminer
+    container_name: etl-adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-source
+      - postgres-destination
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  postgres-data:

@@ -1,0 +1,22 @@
+[
+  {
+    "user_id": "user001",
+    "full_name": "John Doe",
+    "age": 28,
+    "preferences": {
+      "theme": "dark",
+      "notifications": true
+    },
+    "last_login": "2023-01-15T10:30:00"
+  },
+  {
+    "user_id": "user002",
+    "full_name": "Jane Smith",
+    "age": 32,
+    "preferences": {
+      "theme": "light",
+      "notifications": false
+    },
+    "last_login": "2023-01-16T14:45:00"
+  }
+]
